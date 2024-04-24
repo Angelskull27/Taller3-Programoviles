@@ -1,45 +1,52 @@
-# Flutter samples
+# provider_shopper
 
-[![Build Status](https://github.com/flutter/samples/workflows/Main%20Branch%20CI/badge.svg)](https://github.com/flutter/samples/actions?workflow=Main%20Branch%20CI)
+A Flutter sample app that shows a state management approach using the [Provider][] package.
+This is the app discussed in the [Simple app state management][simple] section of
+[flutter.dev][].
 
-A collection of open source samples that illustrate best practices for
-[Flutter](https://flutter.dev).
+[Provider]: https://pub.dev/packages/provider
+[simple]: https://flutter.dev/docs/development/data-and-backend/state-mgmt/simple
+[flutter.dev]: https://flutter.dev/
 
-## Visual samples index
+## Goals for this sample
 
-The easiest way to browse through the samples in this repo (as well as a few others!)
-is the [visual samples index](https://flutter.github.io/samples).
+* Show simple use of `Provider` for providing an immutable value to a subtree
+* Illustrate a simple state management approach using the ChangeNotifier class
+* Show use of `ProxyProvider` for provided objects that depend on other provided objects
 
-## Tip: minimize download size
+## The important bits
 
-As this repository is quite big, you can use svn to download a single example.
-For example:
+### `lib/main.dart`
 
-```
-svn co https://github.com/flutter/samples/trunk/provider_shopper
-```
+Here the app sets up objects it needs to track state: a catalog and a shopping cart. It builds
+a `MultiProvider` to provide both objects at once to widgets further down the tree.
 
-You can also use a
-[partial clone](https://github.blog/2020-12-21-get-up-to-speed-with-partial-clone-and-shallow-clone/)
-to skip blob objects that aren't currently checked out,
-while including the full commit history:
+The `CartModel` instance is provided using a `ChangeNotifierProxyProvider`, which combines
+two types of functionality:
 
-```
-git clone --filter=blob:none https://github.com/flutter/samples.git
-```
+1. It will automatically subscribe to changes in `CartModel` (if you only want this functionality
+   simply use `ChangeNotifierProvider`).
+2. It takes the value of a previously provided object (in this case, `CatalogModel`, provided
+   just above), and uses it to build the value of `CartModel` (if you only want
+   _this_ functionality, simply use `ProxyProvider`).
 
-## Interested in contributing?
+### `lib/models/*`
 
-See the [contributor's guide](CONTRIBUTING.md)!
+This directory contains the model classes that are provided in `main.dart`. These classes
+represent the app state.
 
-## Questions or issues?
+### `lib/screens/*`
 
-If you have a general question about one of these samples or how to adapt its
-techniques for one of your own apps, try one of these resources:
+This directory contains widgets used to construct the two screens of the app: the catalog and
+the cart. These widgets have access to the current state of both the catalog and the cart
+via `Provider.of`.
 
-* [The FlutterDev Discord](https://discord.gg/rflutterdev)
+## Questions/issues
+
+If you have a general question about Provider, the best places to go are:
+
+* [Provider documentation](https://pub.dev/documentation/provider/latest/)
 * [StackOverflow](https://stackoverflow.com/questions/tagged/flutter)
 
-If you run into a bug in one of the samples, please file an issue in the
-[`flutter/samples` issue tracker](https://github.com/flutter/samples/issues).
-
+If you run into an issue with the sample itself, please file an issue
+in the [main Flutter repo](https://github.com/flutter/flutter/issues).
