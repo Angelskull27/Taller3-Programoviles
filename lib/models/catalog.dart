@@ -1,41 +1,33 @@
-// Copyright 2019 The Flutter team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'package:flutter/material.dart';
 
-/// A proxy of the catalog of items the user can buy.
-///
-/// In a real app, this might be backed by a backend and cached on device.
-/// In this sample app, the catalog is procedurally generated and infinite.
-///
-/// For simplicity, the catalog is expected to be immutable (no products are
-/// expected to be added, removed or changed during the execution of the app).
 class CatalogModel {
   static List<String> itemNames = [
-    'Code Smell',
-    'Control Flow',
-    'Interpreter',
-    'Recursion',
-    'Sprint',
-    'Heisenbug',
-    'Spaghetti',
-    'Hydra Code',
-    'Off-By-One',
-    'Scope',
+    'iPhone 13',
+    'Samsung Galaxy S22',
+    'Google Pixel 7',
+    'OnePlus 10',
+    'Xiaomi Mi 12',
+    'Sony Xperia 5',
+    'LG Velvet 3',
+    'Huawei P50',
+    'Motorola Edge 3',
+    'Nokia 10',
   ];
 
-  /// Get item by [id].
-  ///
-  /// In this sample, the catalog is infinite, looping over [itemNames].
-  Item getById(int id) => Item(id, itemNames[id % itemNames.length]);
+  static List<int> itemPrices = [
+    1000, // iPhone 13
+    900,  // Samsung Galaxy S22
+    800,  // Google Pixel 7
+    700,  // OnePlus 10
+    600,  // Xiaomi Mi 12
+    500,  // Sony Xperia 5
+    400,  // LG Velvet 3
+    300,  // Huawei P50
+    200,  // Motorola Edge 3
+    100,  // Nokia 10
+  ];
 
-  /// Get item by its position in the catalog.
-  Item getByPosition(int position) {
-    // In this simplified case, an item's position in the catalog
-    // is also its id.
-    return getById(position);
-  }
+  Item getById(int id) => Item(id, itemNames[id % itemNames.length], itemPrices[id % itemPrices.length]);
 }
 
 @immutable
@@ -43,11 +35,9 @@ class Item {
   final int id;
   final String name;
   final Color color;
-  final int price = 30;
+  final int price;
 
-  Item(this.id, this.name)
-      // To make the sample app look nicer, each item is given one of the
-      // Material Design primary colors.
+  Item(this.id, this.name, this.price)
       : color = Colors.primaries[id % Colors.primaries.length];
 
   @override
